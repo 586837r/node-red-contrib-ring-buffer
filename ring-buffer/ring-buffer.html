@@ -1,0 +1,98 @@
+<script type="text/javascript">
+    RED.nodes.registerType('ring-buffer', {
+        category: 'storage',
+        color: '#a6bbcf',
+        defaults: {
+            name:       { value: "" },
+            capacity:   { value: 16, required: true },
+            order:      { value: 'old-to-new', required: true },
+            sendOnlyIfFull: { value: false },
+            pushAfterClear: { value: false },
+            extra:          { value: false }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "debug.png",
+        label: function () {
+            return this.name || "ring buffer";
+        },
+        labelStyle: function () {
+            return this.name ? "node_label_italic" : "";
+        },
+    });
+</script>
+
+<script type="text/x-red" data-template-name="ring-buffer">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-capacity"><i class="fa fa-list-ol"></i> Capacity</label>
+        <input type="number" id="node-input-capacity" placeholder="Capacity">
+    </div>
+    <div class="form-row">
+        <label for="node-input-order"><i class="fa fa-sort"></i> Order</label>
+        <select id="node-input-order">
+            <option value="old-to-new" selected>old to new</option>
+            <option value="new-to-old">new to old</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-sendOnlyIfFull"><i class="fa fa-battery-full"></i> Send only if full</label>
+        <input type="checkbox" id="node-input-sendOnlyIfFull" placeholder="Send only if full">
+    </div>
+    <div class="form-row">
+        <label for="node-input-pushAfterClear"><i class="fa fa-plus-circle"></i> Add payload after clear</label>
+        <input type="checkbox" id="node-input-pushAfterClear">
+    </div>
+    <div class="form-row">
+        <label for="node-input-extra"><i class="fa fa-info-circle"></i> Extra info</label>
+        <input type="checkbox" id="node-input-extra" placeholder="Extra info">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="ring-buffer">
+<h1>Simple ring buffer node.</h1>
+
+<h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt class="optional">payload
+            <span class="property-type">any</span>
+        </dt>
+        <dd> the value to be added to the buffer. </dd>
+        <dt class="optional">clear <span class="property-type">bool</span></dt>
+        <dd> if <code>true</code> the buffer will be cleared.</dd>
+    </dl>
+<h3>Outputs</h3>
+     <ul class="node-ports">
+         <li>Standard output
+             <dl class="message-properties">
+                 <dt>payload <span class="property-type">array</span></dt>
+                 <dd>the stored values, ordered as configured.</dd>
+             </dl>
+         </li>
+         <li>Optional output ('Extra info' needs to be enabled)
+             <dl class="message-properties">
+                 <dt class="optional">newest <span class="property-type">any</span></dt>
+                 <dt class="optional">oldest <span class="property-type">any</span></dt>
+                 <dt class="optional">size <span class="property-type">integer</span></dt>
+                 <dt class="optional">capacity <span class="property-type">integer</span></dt>
+             </dl>
+         </li>
+     </ul>
+<h3>Settings</h3>
+    <dl class="message-properties">
+        <dt>Capacity <span class="property-type">integer</span></dt>
+        <dt>Order <span class="property-type">integer</span></dt>
+        <dt class="optional">Send only if full <span class="property-type">bool</span></dt>
+        <dd> if enabled a message will only be sent once the buffer has reached its capacity. </dd>
+        <dt class="optional">Add payload after clear <span class="property-type">bool</span></dt>
+        <dd> if enabled the payload of a message where <code>msg.clear === true</code> will be added
+        after the buffer is cleared.</dd>
+        <dt class="optional">Extra info <span class="property-type">bool</span></dt>
+        <dd> if enabled the additional message properties (see <i>Optional output</i>) will be set. </dd>
+    </dl>
+<h3>Details</h3>
+    <p>The number below the node shows the size of the buffer</p>
+</script>

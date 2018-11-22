@@ -1,0 +1,22 @@
+{
+  "author": {
+    "name": "586837r"
+  },
+  "description": "a ring buffer node for node-red",
+  "keywords": [
+    "node-red",
+    "ring buffer",
+    "circular buffer",
+    "buffer",
+    "log",
+    "history"
+  ],
+  "license": "MIT",
+  "name": "node-red-contrib-ring-buffer",
+  "node-red": {
+    "nodes": {
+      "ring-buffer": "ring-buffer/ring-buffer.js"
+    }
+  },
+  "version": "0.9.2"
+}
