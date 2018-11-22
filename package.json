@@ -1,6 +1,9 @@
 {
+  "name": "node-red-contrib-ring-buffer",
+  "version": "0.9.3",
   "author": {
-    "name": "586837r"
+    "name": "586837r",
+    "email": "586837r@gmail.com"
   },
   "description": "a ring buffer node for node-red",
   "keywords": [
@@ -12,11 +15,13 @@
     "history"
   ],
   "license": "MIT",
-  "name": "node-red-contrib-ring-buffer",
   "node-red": {
     "nodes": {
       "ring-buffer": "ring-buffer/ring-buffer.js"
     }
   },
-  "version": "0.9.2"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/586837r/node-red-contrib-ring-buffer"
+  }
 }
