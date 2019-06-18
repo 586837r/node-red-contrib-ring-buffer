@@ -8,6 +8,11 @@ This is a simple ring buffer node for node-red.
 - If 'Send only if full' is enabled this node will only send a message  if it's capacity has been reached.
 - If 'Extra Info' is enabled this node will add 'size', 'capacity', 'oldest' and 'newest' properties to the message.
 
+## Changelog
+
+- **0.10.0**
+  - added *Separate Buffer per Topic*
+
 ## Testing Example
 
 ```json

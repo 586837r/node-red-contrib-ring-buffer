@@ -58,46 +58,44 @@
 </script>
 
 <script type="text/x-red" data-help-name="ring-buffer">
-<h1>Simple ring buffer node.</h1>
-
-<h3>Inputs</h3>
-    <dl class="message-properties">
-        <dt class="optional">payload
-            <span class="property-type">any</span>
-        </dt>
-        <dd> the value to be added to the buffer. </dd>
-        <dt class="optional">clear <span class="property-type">bool</span></dt>
-        <dd> if <code>true</code> the buffer will be cleared.</dd>
-    </dl>
-<h3>Outputs</h3>
-     <ul class="node-ports">
-         <li>Standard output
-             <dl class="message-properties">
-                 <dt>payload <span class="property-type">array</span></dt>
-                 <dd>the stored values, ordered as configured.</dd>
-             </dl>
-         </li>
-         <li>Optional output ('Extra info' needs to be enabled)
-             <dl class="message-properties">
-                 <dt class="optional">newest <span class="property-type">any</span></dt>
-                 <dt class="optional">oldest <span class="property-type">any</span></dt>
-                 <dt class="optional">size <span class="property-type">integer</span></dt>
-                 <dt class="optional">capacity <span class="property-type">integer</span></dt>
-             </dl>
-         </li>
-     </ul>
-<h3>Settings</h3>
-    <dl class="message-properties">
-        <dt>Capacity <span class="property-type">integer</span></dt>
-        <dt>Order <span class="property-type">integer</span></dt>
-        <dt class="optional">Send only if full <span class="property-type">bool</span></dt>
-        <dd> if enabled a message will only be sent once the buffer has reached its capacity. </dd>
-        <dt class="optional">Add payload after clear <span class="property-type">bool</span></dt>
-        <dd> if enabled the payload of a message where <code>msg.clear === true</code> will be added
-        after the buffer is cleared.</dd>
-        <dt class="optional">Extra info <span class="property-type">bool</span></dt>
-        <dd> if enabled the additional message properties (see <i>Optional output</i>) will be set. </dd>
-    </dl>
-<h3>Details</h3>
-    <p>The number below the node shows the size of the buffer</p>
+    <p>Simple ring buffer node.</p>
+    <hr>
+    <h3 id="Inputs"><strong>Inputs</strong></h3>
+    <ul>
+        <li><strong>payload</strong>
+            <ul>
+                <li>the value to be added to the buffer</li>
+            </ul>
+        </li>
+        <li><strong>clear</strong>
+            <ul>
+                <li>if truthy this will clear the buffer</li>
+            </ul>
+        </li>
+        <li><strong>clearAll</strong>
+            <ul>
+                <li>if truthy this will clear all buffers</li>
+            </ul>
+        </li>
+    </ul>
+    <hr>
+    <h3 id="Outputs"><strong>Outputs</strong></h3>
+    <ul>
+        <li><strong>payload</strong>
+            <ul>
+                <li>the stored payloads either new to old or old to new</li>
+            </ul>
+        </li>
+        <li><strong>newest, oldest, size, capacity</strong>
+            <ul>
+                <li>optional output if <em>Extra Info</em> is enabled</li>
+            </ul>
+        </li>
+    </ul>
+    <hr>
+    <h3 id="References"><strong>References</strong></h3>
+    <ul>
+        <li><a href="https://npmjs.com/package/node-red-contrib-ring-buffer">npm</a> - the nodes npm repository</li>
+        <li><a href="https://github.com/586837r/node-red-contrib-ring-buffer">GitHub</a> - the nodes GitHub repository</li>
+    </ul>
 </script>
