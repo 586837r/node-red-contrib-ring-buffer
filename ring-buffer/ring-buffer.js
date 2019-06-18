@@ -4,7 +4,7 @@ module.exports = function (RED) {
 
         class RingBuffer {
             constructor(n) {
-                this.capacity = n
+                this.capacity = n + 1
                 this.clear()
             }
 
@@ -102,43 +102,49 @@ module.exports = function (RED) {
         this.extra = config.extra
         this.pushAfterClear = config.pushAfterClear
         this.sendOnlyIfFull = config.sendOnlyIfFull
+        this.perTopic = config.perTopic
+        this.capacity = parseInt(config.capacity)
 
-        this.ringBuffer = new RingBuffer(parseInt(config.capacity) + 1)
+        this.ringBuffers = {};
 
         this.status({ fill: 'grey', shape: 'ring', text: '0' })
         this.on('input', function (msg) {
 
-            let clear = msg.clear === true
+            const topic = config.perTopic && msg.topic ? msg.topic : 'default'
 
-            if (clear) {
-                this.ringBuffer.clear()
+            if(msg.clearAll) {
+                this.ringBuffers = {}
+                return;
             }
 
-            if ((!clear || this.pushAfterClear) && typeof msg.payload !== 'undefined') {
-                this.ringBuffer.push(msg.payload)
+            if (msg.clear) {
+                delete this.ringBuffers[topic]
+            }
+
+            if (((!msg.clear && !msg.clearAll) || this.pushAfterClear) && msg.payload !== undefined) {
+                const ringBuffer = this.ringBuffers[topic] || (this.ringBuffers[topic] = new RingBuffer(this.capacity))
+                ringBuffer.push(msg.payload)
             }      
 
             if (this.extra) {
-                msg.capacity = this.ringBuffer.capacity - 1
-                msg.size = this.ringBuffer.size()
-                msg.oldest = this.ringBuffer.front()
-                msg.newest = this.ringBuffer.back()
-                // msg.rb = this.ringBuffer
-                // msg.ths = this
-                // msg.full = this.ringBuffer.full()
+                const ringBuffer = this.ringBuffers[topic] || (this.ringBuffers[topic] = new RingBuffer(this.capacity))
+                msg.capacity = ringBuffer.capacity - 1
+                msg.size = ringBuffer.size()
+                msg.oldest = ringBuffer.front()
+                msg.newest = ringBuffer.back()
             }
 
-            this.status({ fill: 'grey', shape: this.ringBuffer.size() === 0 ? 'ring' : 'dot', text: this.ringBuffer.size() })
+            const limitString = (str, len) => str.length <= len ? str.substring(0, len) : str.substring(0, len - 3) + "..."
 
-            if(!this.sendOnlyIfFull || this.ringBuffer.full())
-            {   
-                if (!this.orderReversed) {
-                    msg.payload = this.ringBuffer.toArray()
-                }
-                else {
-                    msg.payload = this.ringBuffer.toArrayReversed()
-                }
+            this.status({
+                fill: 'grey', 
+                shape: Object.keys(this.ringBuffers).length === 0 ? 'ring' : 'dot', 
+                text: limitString(Object.values(this.ringBuffers).map(rb => rb.size()).join(', '), 32)
+            })
 
+            if(!this.sendOnlyIfFull || this.ringBuffer.full()) {
+                const ringBuffer = this.ringBuffers[topic] || (this.ringBuffers[topic] = new RingBuffer(this.capacity))
+                msg.payload = this.orderReversed ? ringBuffer.toArrayReversed() : ringBuffer.toArray()
                 this.send(msg)
             }
         });
