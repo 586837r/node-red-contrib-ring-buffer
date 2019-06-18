@@ -116,6 +116,7 @@ module.exports = function (RED) {
 
             if(msg.clearAll) {
                 this.ringBuffers = {};
+                this.status({ fill: 'grey', shape: 'ring', text: '0' });
                 return;
             }
 
