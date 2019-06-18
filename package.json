@@ -17,7 +17,7 @@
   "license": "MIT",
   "node-red": {
     "nodes": {
-      "ring-buffer": "ring-buffer/ring-buffer.js"
+      "ring-buffer": "nodes/ring-buffer.js"
     }
   },
   "repository": {
